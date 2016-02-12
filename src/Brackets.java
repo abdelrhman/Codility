@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.Stack;
 
 
 public class Brackets {
@@ -9,26 +9,35 @@ public class Brackets {
 	}
 	
 	
+	private static boolean isValid(String left, String right){
+		if (left.equals("(") && right.equals(")"))
+	        return true;
+	    if (left.equals("{") && right.equals("}"))
+	        return true ;
+	    if (left.equals("[") && right.equals("]"))
+	        return true; 
+		return false; 
+	}
+	
 	
 	public static int solution(String s) {
 		
-		if (s.length() % 2 != 0)
-			return 0;
-		
-		HashMap<String, String> nestingChars = new HashMap<>();
-		nestingChars.put("{", "}");
-		nestingChars.put("[", "]");
-		nestingChars.put("(", ")");
-		nestingChars.put("}", "{");
-		nestingChars.put("]", "[");
-		nestingChars.put(")", "(");
-		char [] sToChars = s.toCharArray();
-		for (int i =0 ; i< s.length()/2 ; i++){
-			int backIndex = s.length() -1 -i;
-			System.out.println(nestingChars.get(sToChars[i]+"").equals(sToChars[backIndex]+""));
-			if (!nestingChars.get(sToChars[i]+"").equals(sToChars[backIndex]+""))
-				return 0;
+		Stack<String> sStack = new Stack<>();
+		for(char c : s.toCharArray()){
+			//System.out.println(c);
+			if (c == '{' ||c == '['||c == '('){
+				sStack.add(String.valueOf(c));
+				}
+			else{
+				if (sStack.isEmpty())
+					return 0 ;
+				String last = sStack.pop();
+				if(!isValid(last, String.valueOf(c)))
+					return 0 ; 
+			}
 		}
+		if (!sStack.isEmpty())
+			return 0 ; 
 		
 		return 1; 
     }
